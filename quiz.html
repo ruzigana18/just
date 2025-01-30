@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educational Quiz Mode</title>
+</head>
+<body>
+  <h1>Educational Quiz Mode</h1>
+  <button onclick="startQuiz()">Start Quiz</button>
+
+  <script>
+    // Generate a basic math question
+    function generateMathQuestion() {
+      const a = Math.floor(Math.random() * 20) + 1;
+      const b = Math.floor(Math.random() * 20) + 1;
+      const operation = Math.random() < 0.5 ? '+' : '-';
+
+      const question = `What is ${a} ${operation} ${b}?`;
+      const answer = operation === '+' ? a + b : a - b;
+      return { question, answer };
+    }
+
+    // Generate a basic calculus question (derivative of ax^n where a and n are small integers)
+    function generateCalculusQuestion() {
+      const a = Math.floor(Math.random() * 5) + 1;
+      const n = Math.floor(Math.random() * 3) + 1;
+
+      // Polynomial function a*x^n
+      const functionStr = `${a}x^${n}`;
+      const question = `What is the derivative of ${functionStr} with respect to x?`;
+      
+      // Calculate derivative of ax^n -> a * n * x^(n - 1)
+      const derivative = n > 1 ? `${a * n}x^${n - 1}` : `${a * n}`;
+      const answer = derivative;
+
+      return { question, answer };
+    }
+
+    // Start the quiz
+    function startQuiz() {
+      alert("Welcome to Educational Quiz Mode!");
+      let score = 0;
+
+      for (let i = 0; i < 5; i++) {  // 5-question quiz
+        // Randomly decide between a math or calculus question
+        const isMathQuestion = Math.random() < 0.5;
+        const { question, answer } = isMathQuestion ? generateMathQuestion() : generateCalculusQuestion();
+
+        const userAnswer = prompt(question);
+
+        // Check if the user's answer matches the expected answer
+        if (userAnswer && userAnswer.trim() === answer) {
+          alert("Correct!");
+          score++;
+        } else {
+          alert(`Incorrect. The correct answer was ${answer}.`);
+        }
+      }
+
+      alert(`Your final score is: ${score}/5`);
+    }
+  </script>
+</body>
+</html>

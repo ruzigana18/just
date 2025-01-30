@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Feedback Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+    input, button { font-size: 18px; margin: 5px; }
+    #result { font-weight: bold; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Voice Feedback Calculator</h1>
+
+  <input type="number" id="num1" placeholder="Enter first number">
+  <input type="number" id="num2" placeholder="Enter second number">
+  
+  <div>
+    <button onclick="calculate('add')">Add</button>
+    <button onclick="calculate('subtract')">Subtract</button>
+    <button onclick="calculate('multiply')">Multiply</button>
+    <button onclick="calculate('divide')">Divide</button>
+  </div>
+  
+  <div id="result">Result: </div>
+
+  <script>
+    function calculate(operation) {
+      const num1 = parseFloat(document.getElementById('num1').value);
+      const num2 = parseFloat(document.getElementById('num2').value);
+      let result;
+
+      // Perform the selected operation
+      if (isNaN(num1) || isNaN(num2)) {
+        result = "Please enter valid numbers.";
+      } else {
+        switch (operation) {
+          case 'add':
+            result = num1 + num2;
+            break;
+          case 'subtract':
+            result = num1 - num2;
+            break;
+          case 'multiply':
+            result = num1 * num2;
+            break;
+          case 'divide':
+            if (num2 === 0) {
+              result = "Cannot divide by zero.";
+            } else {
+              result = num1 / num2;
+            }
+            break;
+          default:
+            result = "Invalid operation.";
+        }
+      }
+
+      // Display the result
+      document.getElementById('result').innerText = `Result: ${result}`;
+      
+      // Provide voice feedback for the result
+      speakResult(result);
+    }
+
+    function speakResult(result) {
+      const speech = new SpeechSynthesisUtterance();
+      speech.text = `The result is ${result}`;
+      speech.lang = 'en-US';
+      speech.pitch = 1;
+      speech.rate = 1;
+      window.speechSynthesis.speak(speech);
+    }
+  </script>
+</body>
+</html>

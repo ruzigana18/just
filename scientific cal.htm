@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator with Login</title>
+  <style>
+    /* General styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      background: url(new-york-city-at-night-3w4i009ogoesa632.jpg);
+    }
+
+    /* Login container styling */
+    #login-container, #calculator-container {
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(99, 185, 243, 0.1);
+      background-color: aqua;
+      width: 300px;
+      text-align: center;
+    }
+
+    #login-container input, #login-container button, #calculator-container input {
+      width: 90%;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    /* Calculator container styling */
+    #display {
+      width: calc(100% - 10px);
+      padding: 10px;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+
+    button {
+      padding: 15px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    button.equal {
+      grid-column: span 5;
+      background-color: #4caf50;
+      color: rgb(58, 180, 225);
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div id="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div id="login-message"></div>
+  </div>
+
+  <!-- Calculator Container -->
+  <div id="calculator-container" style="display: none;">
+    <h2>Scientific Calculator</h2>
+    <input type="text" id="display" disabled>
+
+    <div class="buttons">
+      <button onclick="appendToDisplay('7')">7</button>
+      <button onclick="appendToDisplay('8')">8</button>
+      <button onclick="appendToDisplay('9')">9</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="appendToDisplay('/')">÷</button>
+
+      <button onclick="appendToDisplay('4')">4</button>
+      <button onclick="appendToDisplay('5')">5</button>
+      <button onclick="appendToDisplay('6')">6</button>
+      <button onclick="appendToDisplay('*')">×</button>
+      <button onclick="appendToDisplay('sqrt(')">√</button>
+
+      <button onclick="appendToDisplay('1')">1</button>
+      <button onclick="appendToDisplay('2')">2</button>
+      <button onclick="appendToDisplay('3')">3</button>
+      <button onclick="appendToDisplay('-')">-</button>
+      <button onclick="appendToDisplay('pow(')">x²</button>
+
+      <button onclick="appendToDisplay('0')">0</button>
+      <button onclick="appendToDisplay('.')">.</button>
+      <button onclick="appendToDisplay('(')">(</button>
+      <button onclick="appendToDisplay(')')">)</button>
+      <button onclick="appendToDisplay('+')">+</button>
+
+      <button onclick="deleteLastCharacter()">DEL</button>
+      <button onclick="calculate()" class="equal">=</button>
+    </div>
+  </div>
+
+  <script>
+    // Hardcoded credentials for demonstration
+    const validUsername = "helvis";
+    const validPassword = "1234";
+
+    // Login function
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const loginMessage = document.getElementById("login-message");
+
+      if (username === validUsername && password === validPassword) {
+        // Show calculator and hide login
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("calculator-container").style.display = "block";
+        document.addEventListener('keydown', handleKeyDown); // Enable keyboard support after login
+      } else {
+        loginMessage.textContent = "Invalid username or password.";
+        loginMessage.style.color = "red";
+      }
+    }
+
+    // Calculator functions
+    function appendToDisplay(value) {
+      const display = document.getElementById("display");
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      const display = document.getElementById("display");
+      display.value = "";
+    }
+
+    function deleteLastCharacter() {
+      const display = document.getElementById("display");
+      display.value = display.value.slice(0, -1); // Remove the last character
+    }
+
+    function calculate() {
+      const display = document.getElementById("display");
+      try {
+        // Evaluate the expression in display
+        let result = eval(display.value.replace("sqrt", "Math.sqrt").replace("pow", "Math.pow"));
+        display.value = result;
+      } catch (error) {
+        display.value = "Error";
+      }
+    }
+
+    // Handle keyboard input
+    function handleKeyDown(event) {
+      const key = event.key;
+      if (/[0-9]/.test(key)) {
+        appendToDisplay(key); // Append numbers
+      } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+        appendToDisplay(key); // Append operators
+      } else if (key === "Enter") {
+        calculate(); // Calculate on Enter
+      } else if (key === "Backspace") {
+        deleteLastCharacter(); // Delete on Backspace
+      } else if (key === "Escape") {
+        clearDisplay(); // Clear display on Escape
+      } else if (key === "(" || key === ")" || key === ".") {
+        appendToDisplay(key); // Append parentheses and decimal point
+      }
+    }
+  </script>
+</body>
+</html>
